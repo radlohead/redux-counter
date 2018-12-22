@@ -2,27 +2,37 @@ import * as React from 'react';
 import './Counter.css';
 
 interface IProps {
-    number: any;
-    color: any;
-    onIncrement(): void;
-    onDecrement(): void;
-    onSetColor(): void;
+    number: number;
+    color: string;
+    index: number;
+    onIncrement(index: number): void;
+    onDecrement(index: number): void;
+    onSetColor(index: number): void;
 }
 
-const Counter = ({number, color, onIncrement, onDecrement, onSetColor}: IProps): JSX.Element => {
+const Counter = ({number, color, index, onIncrement, onDecrement, onSetColor}: IProps): JSX.Element => {
     return (
         <div 
             className="Counter"
-            onClick={onIncrement}
-            onContextMenu={(e: any): void => {
+            onClick={() => onIncrement(index)}
+            onContextMenu={(e: { preventDefault(): void }): void => {
                 e.preventDefault();
-                onDecrement();
+                onDecrement(index);
             }}
-            onDoubleClick={onSetColor}
+            onDoubleClick={() => onSetColor(index)}
             style={{
                 backgroundColor: color
             }}>{number}</div>
     )
+};
+
+Counter.defaultProps = {
+    index: 0,
+    number: 0,
+    color: 'black',
+    onIncrement: () => console.warn('onIncrement not defined'),
+    onDecrement: () => console.warn('onDecrement not defined'),
+    onSetColor: () => console.warn('onSetColor not defined'),
 }
 
 export default Counter;
